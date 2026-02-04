@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TE FlowOne Knowledge Hub v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#1e293b',
+                        accent: '#3b82f6',
+                        success: '#22c55e',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Sidebar Toggle Button (Desktop) - positioned inside sidebar header -->
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-accent rounded-lg shadow-lg">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-72 bg-primary shadow-2xl transform -translate-x-full lg:translate-x-0 transition-all duration-300 z-40 overflow-y-auto">
+        <div class="p-6 border-b border-gray-700 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-accent">
+                    <i class="fas fa-network-wired mr-2"></i>TE FlowOne
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Knowledge Dashboard</p>
+            </div>
+            <button id="sidebar-toggle" class="hidden lg:flex p-2 bg-accent rounded-lg shadow-lg hover:bg-blue-600 transition-colors">
+                <i class="fas fa-chevron-left text-xl" id="toggle-icon"></i>
+            </button>
+        </div>
+
+        <nav class="p-4">
+            <!-- Architecture Section -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="architecture">
+                    <span><i class="fas fa-sitemap mr-3 text-accent"></i>Architecture</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#overview" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">
+                        <i class="fas fa-eye mr-2 text-gray-400"></i>Overview
+                    </a>
+                    <a href="#northbound" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">
+                        <i class="fas fa-arrow-up mr-2 text-green-400"></i>Northbound
+                    </a>
+                    <a href="#middleware" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">
+                        <i class="fas fa-cogs mr-2 text-blue-400"></i>Middleware (FlowOne)
+                    </a>
+                    <a href="#inventory" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">
+                        <i class="fas fa-database mr-2 text-purple-400"></i>Inventory (VC4)
+                    </a>
+                    <a href="#southbound" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">
+                        <i class="fas fa-arrow-down mr-2 text-orange-400"></i>Southbound (NEIs)
+                    </a>
+                </div>
+            </div>
+
+            <!-- Data Services -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="data">
+                    <span><i class="fas fa-wifi mr-3 text-green-400"></i>Data Services</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#xdsl" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">xDSL (ADSL/VDSL)</a>
+                    <a href="#ftth" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">FTTH B2C</a>
+                    <a href="#shdsl" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">SHDSL (B2B)</a>
+                    <a href="#p2p" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Point-to-Point</a>
+                    <a href="#gpon" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">GPON FTTH</a>
+                    <a href="#iptv" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">IPTV</a>
+                    <a href="#optionpack" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Option Pack</a>
+                </div>
+            </div>
+
+            <!-- Voice Services -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="voice">
+                    <span><i class="fas fa-phone mr-3 text-blue-400"></i>Voice Services</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#ftth-voice-lifecycle" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Voice Lifecycle</a>
+                    <a href="#sip" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">SIP</a>
+                    <a href="#ftth-voice" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">FTTH Voice</a>
+                    <a href="#fvno" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">FVNO (Wholesale)</a>
+                    <a href="#pri" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">PRI</a>
+                    <a href="#fxo-fxs" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">FXO/FXS</a>
+                </div>
+            </div>
+
+            <!-- IPTV Services -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="iptv">
+                    <span><i class="fas fa-tv mr-3 text-purple-400"></i>IPTV Services</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#iptv-lifecycle" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">IPTV Lifecycle</a>
+                    <a href="#iptv" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">IPTV Overview</a>
+                    <a href="#products" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Products & Actions</a>
+                </div>
+            </div>
+
+            <!-- FlowOne Workflows -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="workflows">
+                    <span><i class="fas fa-project-diagram mr-3 text-purple-400"></i>Workflows</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#cdom" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">CDOM Framework</a>
+                    <a href="#catalog" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Catalog Model</a>
+                    <a href="#fallout" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Fallout Management</a>
+                    <a href="#rollback" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Rollback Process</a>
+                </div>
+            </div>
+
+            <!-- Cheat Sheets -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="cheatsheets">
+                    <span><i class="fas fa-book mr-3 text-yellow-400"></i>Cheat Sheets</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#linux-admin" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Linux Admin 1&2</a>
+                    <a href="#oracle-admin" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Oracle Admin</a>
+                    <a href="#flowone-modules" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">FlowOne Modules</a>
+                    <a href="#shell-scripting" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Shell Scripting</a>
+                    <a href="#java-oop" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Java OOP</a>
+                </div>
+            </div>
+
+            <!-- Quick Reference -->
+            <div class="nav-section mb-4">
+                <button class="nav-header w-full flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors" data-section="quickref">
+                    <span><i class="fas fa-bolt mr-3 text-orange-400"></i>Quick Reference</span>
+                    <i class="fas fa-chevron-down text-sm transition-transform"></i>
+                </button>
+                <div class="nav-content hidden pl-4 mt-2 space-y-1">
+                    <a href="#glossary" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Glossary</a>
+                    <a href="#protocols" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Protocols & APIs</a>
+                    <a href="#vendors" class="nav-link block p-2 rounded hover:bg-secondary transition-colors">Vendors & NEIs</a>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Overlay for mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 min-h-screen">
+        <div class="p-4 lg:p-8">
+            
+            <!-- Header -->
+            <header class="mb-8">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                    <div class="ml-12 lg:ml-0">
+                        <h1 class="text-3xl lg:text-4xl font-bold">Telecom Egypt FlowOne</h1>
+                        <p class="text-gray-400 mt-2">Service Provisioning & Activation Knowledge Hub</p>
+                    </div>
+                    <div class="mt-4 lg:mt-0 flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="Search..." class="bg-secondary border border-gray-600 rounded-lg px-4 py-2 pl-10 focus:outline-none focus:border-accent w-full lg:w-64">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-eye mr-3 text-accent"></i>System Overview
+                    </h2>
+                    
+                    <!-- Architecture Diagram -->
+                    <div class="architecture-diagram bg-primary rounded-xl p-6 mb-6">
+                        <div class="grid grid-cols-1 gap-4">
+                            <!-- Northbound Layer -->
+                            <div class="layer northbound bg-gradient-to-r from-green-900/50 to-green-800/30 rounded-xl p-4 border border-green-700">
+                                <h3 class="text-lg font-semibold text-green-400 mb-3">
+                                    <i class="fas fa-arrow-up mr-2"></i>NORTHBOUND (BSS/OSS)
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer" data-tooltip="Huawei Service Order Management">
+                                        <i class="fas fa-server text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">Huawei SOM</p>
+                                    </div>
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-users text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">BSS/CRM</p>
+                                    </div>
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-globe text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">ADSL Portal</p>
+                                    </div>
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-building text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">KAM Portal</p>
+                                    </div>
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-store text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">One Stop Shop</p>
+                                    </div>
+                                    <div class="system-box bg-green-900/50 p-3 rounded-lg text-center hover:bg-green-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-shield-alt text-2xl mb-2 text-green-400"></i>
+                                        <p class="text-sm">Assurance Portal</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flow Arrow -->
+                            <div class="flex justify-center">
+                                <i class="fas fa-arrow-down text-3xl text-gray-500 animate-bounce"></i>
+                            </div>
+
+                            <!-- Middleware 11 Layer -->
+                            <div class="layer middleware11 bg-gradient-to-r from-cyan-900/50 to-cyan-800/30 rounded-xl p-4 border border-cyan-700">
+                                <h3 class="text-lg font-semibold text-cyan-400 mb-3">
+                                    <i class="fas fa-exchange-alt mr-2"></i>MIDDLEWARE 11 (Integration Layer)
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <div class="system-box bg-cyan-900/50 p-3 rounded-lg text-center hover:bg-cyan-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-plug text-xl mb-2 text-cyan-400"></i>
+                                        <p class="text-sm">API Gateway</p>
+                                    </div>
+                                    <div class="system-box bg-cyan-900/50 p-3 rounded-lg text-center hover:bg-cyan-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-sync text-xl mb-2 text-cyan-400"></i>
+                                        <p class="text-sm">Message Queue</p>
+                                    </div>
+                                    <div class="system-box bg-cyan-900/50 p-3 rounded-lg text-center hover:bg-cyan-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-code text-xl mb-2 text-cyan-400"></i>
+                                        <p class="text-sm">SOAP/REST Adapter</p>
+                                    </div>
+                                    <div class="system-box bg-cyan-900/50 p-3 rounded-lg text-center hover:bg-cyan-800/50 transition-colors cursor-pointer">
+                                        <i class="fas fa-shield-alt text-xl mb-2 text-cyan-400"></i>
+                                        <p class="text-sm">Auth & Security</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-3 text-center">Handles protocol translation, routing, and message transformation between BSS/OSS and FlowOne</p>
+                            </div>
+
+                            <!-- Flow Arrow -->
+                            <div class="flex justify-center">
+                                <i class="fas fa-arrow-down text-3xl text-gray-500 animate-bounce"></i>
+                            </div>
+
+                            <!-- Nokia FlowOne Layer -->
+                            <div class="layer middleware bg-gradient-to-r from-blue-900/50 to-blue-800/30 rounded-xl p-4 border border-blue-700">
+                                <h3 class="text-lg font-semibold text-blue-400 mb-3">
+                                    <i class="fas fa-cogs mr-2"></i>NOKIA FLOWONE (Service Activation)
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="system-box bg-blue-900/50 p-4 rounded-lg hover:bg-blue-800/50 transition-colors cursor-pointer">
+                                        <div class="flex items-center mb-2">
+                                            <i class="fas fa-clipboard-list text-2xl text-blue-400 mr-3"></i>
+                                            <h4 class="font-semibold">Order Management (OM)</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-400">CDOM-based order orchestration, decomposition, and lifecycle management</p>
+                                    </div>
+                                    <div class="system-box bg-blue-900/50 p-4 rounded-lg hover:bg-blue-800/50 transition-colors cursor-pointer">
+                                        <div class="flex items-center mb-2">
+                                            <i class="fas fa-play-circle text-2xl text-blue-400 mr-3"></i>
+                                            <h4 class="font-semibold">Provisioning & Activation (P&A)</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-400">Network element configuration via EMS adapters</p>
+                                    </div>
+                                    <div class="system-box bg-blue-900/50 p-4 rounded-lg hover:bg-blue-800/50 transition-colors cursor-pointer">
+                                        <div class="flex items-center mb-2">
+                                            <i class="fas fa-book-open text-2xl text-blue-400 mr-3"></i>
+                                            <h4 class="font-semibold">Service Catalog</h4>
+                                        </div>
+                                        <p class="text-sm text-gray-400">CFS/RFS/TS specifications and versioning</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex justify-center">
+                                    <div class="system-box bg-blue-800/50 p-3 rounded-lg inline-flex items-center">
+                                        <i class="fas fa-tasks text-xl text-blue-400 mr-2"></i>
+                                        <span class="text-sm">Order Hub (OH) - Manual Task Management</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flow Arrow -->
+                            <div class="flex justify-center items-center gap-4">
+                                <i class="fas fa-arrow-down text-3xl text-gray-500 animate-bounce"></i>
+                                <span class="text-gray-500">|</span>
+                                <i class="fas fa-arrow-right text-3xl text-gray-500"></i>
+                            </div>
+
+                            <!-- Inventory Layer -->
+                            <div class="layer inventory bg-gradient-to-r from-purple-900/50 to-purple-800/30 rounded-xl p-4 border border-purple-700">
+                                <h3 class="text-lg font-semibold text-purple-400 mb-3">
+                                    <i class="fas fa-database mr-2"></i>INVENTORY (VC4)
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <div class="system-box bg-purple-900/50 p-3 rounded-lg text-center">
+                                        <i class="fas fa-search text-xl mb-2 text-purple-400"></i>
+                                        <p class="text-sm">Feasibility Check</p>
+                                    </div>
+                                    <div class="system-box bg-purple-900/50 p-3 rounded-lg text-center">
+                                        <i class="fas fa-lock text-xl mb-2 text-purple-400"></i>
+                                        <p class="text-sm">Resource Reserve</p>
+                                    </div>
+                                    <div class="system-box bg-purple-900/50 p-3 rounded-lg text-center">
+                                        <i class="fas fa-check-circle text-xl mb-2 text-purple-400"></i>
+                                        <p class="text-sm">Commit</p>
+                                    </div>
+                                    <div class="system-box bg-purple-900/50 p-3 rounded-lg text-center">
+                                        <i class="fas fa-undo text-xl mb-2 text-purple-400"></i>
+                                        <p class="text-sm">Rollback</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Flow Arrow -->
+                            <div class="flex justify-center">
+                                <i class="fas fa-arrow-down text-3xl text-gray-500 animate-bounce"></i>
+                            </div>
+
+                            <!-- Southbound Layer -->
+                            <div class="layer southbound bg-gradient-to-r from-orange-900/50 to-orange-800/30 rounded-xl p-4 border border-orange-700">
+                                <h3 class="text-lg font-semibold text-orange-400 mb-3">
+                                    <i class="fas fa-arrow-down mr-2"></i>SOUTHBOUND (Network Elements)
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">Huawei</p>
+                                        <p class="text-sm font-semibold">NCE (TL1)</p>
+                                    </div>
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">Nokia</p>
+                                        <p class="text-sm font-semibold">APC (SOAP)</p>
+                                    </div>
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">ZTE</p>
+                                        <p class="text-sm font-semibold">NetNumen (TL1)</p>
+                                    </div>
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">Ericsson</p>
+                                        <p class="text-sm font-semibold">EDA (CAI3G)</p>
+                                    </div>
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">Huawei</p>
+                                        <p class="text-sm font-semibold">IPTV (SOAP)</p>
+                                    </div>
+                                    <div class="system-box bg-orange-900/50 p-3 rounded-lg text-center">
+                                        <p class="text-xs text-orange-400 mb-1">Sandvine</p>
+                                        <p class="text-sm font-semibold">DPI (REST)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Stats -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="stat-card bg-primary p-4 rounded-xl text-center">
+                            <div class="text-3xl font-bold text-accent">8+</div>
+                            <div class="text-sm text-gray-400">Data Services</div>
+                        </div>
+                        <div class="stat-card bg-primary p-4 rounded-xl text-center">
+                            <div class="text-3xl font-bold text-green-400">6+</div>
+                            <div class="text-sm text-gray-400">Voice Services</div>
+                        </div>
+                        <div class="stat-card bg-primary p-4 rounded-xl text-center">
+                            <div class="text-3xl font-bold text-purple-400">12+</div>
+                            <div class="text-sm text-gray-400">Southbound NEIs</div>
+                        </div>
+                        <div class="stat-card bg-primary p-4 rounded-xl text-center">
+                            <div class="text-3xl font-bold text-orange-400">5</div>
+                            <div class="text-sm text-gray-400">CDOM Phases</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CDOM Workflow Section -->
+            <section id="cdom" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-project-diagram mr-3 text-purple-400"></i>CDOM Workflow Phases
+                    </h2>
+                    <p class="text-gray-400 mb-6">Catalog Driven Order Management - The framework for order orchestration in FlowOne</p>
+                    
+                    <div class="workflow-phases flex flex-col lg:flex-row items-stretch gap-4">
+                        <!-- Phase 1 -->
+                        <div class="phase-card flex-1 bg-gradient-to-b from-blue-900/50 to-blue-800/30 rounded-xl p-4 border-t-4 border-blue-500">
+                            <div class="phase-number bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mb-3">1</div>
+                            <h4 class="font-semibold text-blue-400 mb-2">Validation</h4>
+                            <p class="text-sm text-gray-400">Validate input order parameters at the beginning</p>
+                            <div class="mt-3 text-xs">
+                                <span class="bg-blue-900/50 px-2 py-1 rounded">TL_Validation</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Arrow -->
+                        <div class="hidden lg:flex items-center">
+                            <i class="fas fa-arrow-right text-2xl text-gray-500"></i>
+                        </div>
+                        <div class="lg:hidden flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-500"></i>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div class="phase-card flex-1 bg-gradient-to-b from-purple-900/50 to-purple-800/30 rounded-xl p-4 border-t-4 border-purple-500">
+                            <div class="phase-number bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mb-3">2</div>
+                            <h4 class="font-semibold text-purple-400 mb-2">Design & Assign</h4>
+                            <p class="text-sm text-gray-400">Reserve resources in VC4 inventory, perform service design</p>
+                            <div class="mt-3 text-xs space-x-1">
+                                <span class="bg-purple-900/50 px-2 py-1 rounded">VC4_Check</span>
+                                <span class="bg-purple-900/50 px-2 py-1 rounded">VC4_Reserve</span>
+                            </div>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="hidden lg:flex items-center">
+                            <i class="fas fa-arrow-right text-2xl text-gray-500"></i>
+                        </div>
+                        <div class="lg:hidden flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-500"></i>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div class="phase-card flex-1 bg-gradient-to-b from-green-900/50 to-green-800/30 rounded-xl p-4 border-t-4 border-green-500">
+                            <div class="phase-number bg-green-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mb-3">3</div>
+                            <h4 class="font-semibold text-green-400 mb-2">Configuration</h4>
+                            <p class="text-sm text-gray-400">Provision/configure services on network elements via EMS</p>
+                            <div class="mt-3 text-xs space-x-1">
+                                <span class="bg-green-900/50 px-2 py-1 rounded">Create RFS</span>
+                                <span class="bg-green-900/50 px-2 py-1 rounded">NEI Calls</span>
+                            </div>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="hidden lg:flex items-center">
+                            <i class="fas fa-arrow-right text-2xl text-gray-500"></i>
+                        </div>
+                        <div class="lg:hidden flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-500"></i>
+                        </div>
+
+                        <!-- Phase 4 -->
+                        <div class="phase-card flex-1 bg-gradient-to-b from-yellow-900/50 to-yellow-800/30 rounded-xl p-4 border-t-4 border-yellow-500">
+                            <div class="phase-number bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mb-3">4</div>
+                            <h4 class="font-semibold text-yellow-400 mb-2">Service Delivery</h4>
+                            <p class="text-sm text-gray-400">Onsite installation at customer premises (CPE)</p>
+                            <div class="mt-3 text-xs">
+                                <span class="bg-yellow-900/50 px-2 py-1 rounded">Manual/OH Task</span>
+                            </div>
+                        </div>
+
+                        <!-- Arrow -->
+                        <div class="hidden lg:flex items-center">
+                            <i class="fas fa-arrow-right text-2xl text-gray-500"></i>
+                        </div>
+                        <div class="lg:hidden flex justify-center">
+                            <i class="fas fa-arrow-down text-2xl text-gray-500"></i>
+                        </div>
+
+                        <!-- Phase 5 -->
+                        <div class="phase-card flex-1 bg-gradient-to-b from-red-900/50 to-red-800/30 rounded-xl p-4 border-t-4 border-red-500">
+                            <div class="phase-number bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mb-3">5</div>
+                            <h4 class="font-semibold text-red-400 mb-2">Finalization</h4>
+                            <p class="text-sm text-gray-400">Complete order, update inventory status, post-delivery tasks</p>
+                            <div class="mt-3 text-xs">
+                                <span class="bg-red-900/50 px-2 py-1 rounded">VC4_Commit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Catalog Model Section -->
+            <section id="catalog" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book-open mr-3 text-blue-400"></i>Catalog Model (CFS → RFS → TS)
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- CFS -->
+                        <div class="catalog-level bg-gradient-to-b from-green-900/30 to-transparent rounded-xl p-4 border border-green-700">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-xl text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-green-400">Customer Facing Service</h4>
+                                    <p class="text-xs text-gray-400">What customer sees/buys</p>
+                                </div>
+                            </div>
+                            <ul class="text-sm space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>ADSL/VDSL</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>FTTH</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>SHDSL</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>P2P</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>IPTV</li>
+                                <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>Voice SIP/H.248</li>
+                            </ul>
+                        </div>
+
+                        <!-- RFS -->
+                        <div class="catalog-level bg-gradient-to-b from-blue-900/30 to-transparent rounded-xl p-4 border border-blue-700">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-server text-xl text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-400">Resource Facing Service</h4>
+                                    <p class="text-xs text-gray-400">Network resource config</p>
+                                </div>
+                            </div>
+                            <ul class="text-sm space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>VC4_Fetch</li>
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Create_ADSL</li>
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Create_FTTH</li>
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Create_SIP</li>
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>VC4_Commit</li>
+                                <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>Suspend/Resume</li>
+                            </ul>
+                        </div>
+
+                        <!-- TS -->
+                        <div class="catalog-level bg-gradient-to-b from-purple-900/30 to-transparent rounded-xl p-4 border border-purple-700">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-cog text-xl text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-purple-400">Technical Service</h4>
+                                    <p class="text-xs text-gray-400">Atomic NEI commands</p>
+                                </div>
+                            </div>
+                            <ul class="text-sm space-y-2">
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>EMS API Call</li>
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Cross-Connect</li>
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Set Speed</li>
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Add Encapsulation</li>
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>Core Config (EDA/SPG)</li>
+                                <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>IPTV Provision</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Types -->
+                    <div class="mt-6 p-4 bg-primary rounded-xl">
+                        <h4 class="font-semibold mb-3 text-gray-300">Common Transactions</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-green-900/50 text-green-400 rounded-full text-sm">Create</span>
+                            <span class="px-3 py-1 bg-red-900/50 text-red-400 rounded-full text-sm">Terminate</span>
+                            <span class="px-3 py-1 bg-yellow-900/50 text-yellow-400 rounded-full text-sm">Suspend</span>
+                            <span class="px-3 py-1 bg-blue-900/50 text-blue-400 rounded-full text-sm">Resume</span>
+                            <span class="px-3 py-1 bg-purple-900/50 text-purple-400 rounded-full text-sm">Modify Package</span>
+                            <span class="px-3 py-1 bg-orange-900/50 text-orange-400 rounded-full text-sm">Feasibility</span>
+                            <span class="px-3 py-1 bg-pink-900/50 text-pink-400 rounded-full text-sm">VAS Update</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Data Services Section -->
+            <section id="xdsl" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-wifi mr-3 text-green-400"></i>Data Services - xDSL (ADSL/VDSL)
+                    </h2>
+                    
+                    <!-- Use Cases Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-plus-circle text-green-400 mr-2"></i>
+                                <h4 class="font-semibold">Create Service</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Provision new ADSL/VDSL subscriber with speed profile</p>
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                <span class="text-xs bg-blue-900/50 px-2 py-0.5 rounded">VC4</span>
+                                <span class="text-xs bg-orange-900/50 px-2 py-0.5 rounded">EMS</span>
+                            </div>
+                        </div>
+
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-trash text-red-400 mr-2"></i>
+                                <h4 class="font-semibold">Delete Service</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Terminate subscriber, release resources</p>
+                        </div>
+
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-pause-circle text-yellow-400 mr-2"></i>
+                                <h4 class="font-semibold">Suspend Service</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Temporarily disable subscriber access</p>
+                        </div>
+
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                <h4 class="font-semibold">Resume Service</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Restore suspended subscriber access</p>
+                        </div>
+
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-exchange-alt text-purple-400 mr-2"></i>
+                                <h4 class="font-semibold">Change Package</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Upgrade/downgrade speed profile (30→70→100→200)</p>
+                            <div class="mt-2 text-xs text-gray-500">
+                                <i class="fas fa-info-circle mr-1"></i>May require cross-connect recreation
+                            </div>
+                        </div>
+
+                        <div class="use-case-card bg-primary p-4 rounded-xl hover:ring-2 hover:ring-accent transition-all cursor-pointer">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-id-card text-cyan-400 mr-2"></i>
+                                <h4 class="font-semibold">Get NAS Port ID</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Retrieve subscriber NAS port identifier</p>
+                        </div>
+                    </div>
+
+                    <!-- Flow Diagram -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h4 class="font-semibold mb-4 text-gray-300">Create xDSL Flow</h4>
+                        <div class="flow-steps flex flex-col md:flex-row items-center gap-2 text-sm">
+                            <div class="step bg-green-900/50 px-3 py-2 rounded-lg">BSS Request</div>
+                            <i class="fas fa-arrow-right text-gray-500 hidden md:block"></i>
+                            <i class="fas fa-arrow-down text-gray-500 md:hidden"></i>
+                            <div class="step bg-blue-900/50 px-3 py-2 rounded-lg">FlowOne OM</div>
+                            <i class="fas fa-arrow-right text-gray-500 hidden md:block"></i>
+                            <i class="fas fa-arrow-down text-gray-500 md:hidden"></i>
+                            <div class="step bg-purple-900/50 px-3 py-2 rounded-lg">VC4 Fetch</div>
+                            <i class="fas fa-arrow-right text-gray-500 hidden md:block"></i>
+                            <i class="fas fa-arrow-down text-gray-500 md:hidden"></i>
+                            <div class="step bg-orange-900/50 px-3 py-2 rounded-lg">EMS Config</div>
+                            <i class="fas fa-arrow-right text-gray-500 hidden md:block"></i>
+                            <i class="fas fa-arrow-down text-gray-500 md:hidden"></i>
+                            <div class="step bg-purple-900/50 px-3 py-2 rounded-lg">VC4 Commit</div>
+                            <i class="fas fa-arrow-right text-gray-500 hidden md:block"></i>
+                            <i class="fas fa-arrow-down text-gray-500 md:hidden"></i>
+                            <div class="step bg-green-900/50 px-3 py-2 rounded-lg">BSS ACK</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Fallout Management Section -->
+            <section id="fallout" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-3 text-yellow-400"></i>Fallout Management
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Fallout Types -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-gray-300">Fallout Types</h4>
+                            <div class="space-y-3">
+                                <div class="bg-primary p-4 rounded-xl border-l-4 border-red-500">
+                                    <h5 class="font-semibold text-red-400">Technical Fallouts</h5>
+                                    <p class="text-sm text-gray-400 mt-1">System unavailability, network issues, code bugs</p>
+                                </div>
+                                <div class="bg-primary p-4 rounded-xl border-l-4 border-yellow-500">
+                                    <h5 class="font-semibold text-yellow-400">Functional Fallouts</h5>
+                                    <p class="text-sm text-gray-400 mt-1">Missing parameters, data issues, validation failures</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fallout Policies -->
+                        <div>
+                            <h4 class="font-semibold mb-4 text-gray-300">Fallout Policies</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-24 font-mono text-blue-400">IGNORE</span>
+                                    <span class="text-sm text-gray-400">Skip error, continue workflow</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-24 font-mono text-green-400">RETRY</span>
+                                    <span class="text-sm text-gray-400">Retry with interval/count limits</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-24 font-mono text-red-400">ROLLBACK</span>
+                                    <span class="text-sm text-gray-400">Stop and undo all changes</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-24 font-mono text-yellow-400">STOP</span>
+                                    <span class="text-sm text-gray-400">Halt processing</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-24 font-mono text-purple-400">OH</span>
+                                    <span class="text-sm text-gray-400">Manual intervention via Order Hub</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rollback Process Section -->
+            <section id="rollback" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-undo mr-3 text-red-400"></i>Rollback Process
+                    </h2>
+                    <p class="text-gray-400 mb-6">Automatic compensation when service provisioning fails</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-4 text-gray-300">Rollback Triggers</h4>
+                            <div class="space-y-3">
+                                <div class="bg-primary p-4 rounded-xl border-l-4 border-red-500">
+                                    <h5 class="font-semibold text-red-400">P&A Failure</h5>
+                                    <p class="text-sm text-gray-400 mt-1">EMS configuration fails → Rollback VC4 reservation</p>
+                                </div>
+                                <div class="bg-primary p-4 rounded-xl border-l-4 border-orange-500">
+                                    <h5 class="font-semibold text-orange-400">Commit Failure</h5>
+                                    <p class="text-sm text-gray-400 mt-1">VC4 commit fails → Delete created P&A services</p>
+                                </div>
+                                <div class="bg-primary p-4 rounded-xl border-l-4 border-yellow-500">
+                                    <h5 class="font-semibold text-yellow-400">Inflight Cancel</h5>
+                                    <p class="text-sm text-gray-400 mt-1">User cancels order → Undo all completed steps</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-4 text-gray-300">UNDO Tasks by Service</h4>
+                            <div class="space-y-2">
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-32 text-green-400">Create</span>
+                                    <span class="text-sm text-gray-400">→ Delete created resources</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-32 text-yellow-400">Suspend</span>
+                                    <span class="text-sm text-gray-400">→ Resume service</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-32 text-blue-400">Resume</span>
+                                    <span class="text-sm text-gray-400">→ Suspend service</span>
+                                </div>
+                                <div class="flex items-center bg-primary p-3 rounded-lg">
+                                    <span class="w-32 text-purple-400">Change Pkg</span>
+                                    <span class="text-sm text-gray-400">→ Restore previous package</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Protocols & APIs Section -->
+            <section id="protocols" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-exchange-alt mr-3 text-blue-400"></i>Protocols & APIs
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-blue-400 mb-2">SOAP/XML</h4>
+                            <p class="text-sm text-gray-400">VC4 Inventory, Nokia APC, IPTV Huawei</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 8080/8443</p>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-green-400 mb-2">REST/JSON</h4>
+                            <p class="text-sm text-gray-400">Sandvine DPI, BSS Integration, Assurance</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 443</p>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-orange-400 mb-2">TL1</h4>
+                            <p class="text-sm text-gray-400">Huawei NCE, ZTE NetNumen (Legacy)</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 3082/3083</p>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-purple-400 mb-2">CAI3G</h4>
+                            <p class="text-sm text-gray-400">Ericsson EDA for Voice Core</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 2222</p>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-yellow-400 mb-2">H.248/MEGACO</h4>
+                            <p class="text-sm text-gray-400">Voice Gateway Control</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 2944</p>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl">
+                            <h4 class="font-semibold text-cyan-400 mb-2">SIP</h4>
+                            <p class="text-sm text-gray-400">Voice Signaling</p>
+                            <p class="text-xs text-gray-500 mt-2">Port: 5060/5061</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vendors & NEIs Section -->
+            <section id="vendors" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-building mr-3 text-orange-400"></i>Vendors & Network Element Interfaces
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-primary p-4 rounded-xl border-t-4 border-red-500">
+                            <h4 class="font-semibold text-red-400 mb-3">Huawei</h4>
+                            <ul class="text-sm space-y-2 text-gray-400">
+                                <li>• NCE (TL1) - xDSL/GPON OLTs</li>
+                                <li>• iMaster NCE - New FTTH</li>
+                                <li>• IPTV Backend (SOAP)</li>
+                                <li>• BNG/BRAS</li>
+                            </ul>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl border-t-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-400 mb-3">Nokia</h4>
+                            <ul class="text-sm space-y-2 text-gray-400">
+                                <li>• APC (SOAP) - ISAM OLTs</li>
+                                <li>• SAM - Network Management</li>
+                                <li>• SPG - Voice Core</li>
+                            </ul>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl border-t-4 border-green-500">
+                            <h4 class="font-semibold text-green-400 mb-3">ZTE</h4>
+                            <ul class="text-sm space-y-2 text-gray-400">
+                                <li>• NetNumen (TL1) - OLTs</li>
+                                <li>• U31 EMS</li>
+                            </ul>
+                        </div>
+                        <div class="bg-primary p-4 rounded-xl border-t-4 border-purple-500">
+                            <h4 class="font-semibold text-purple-400 mb-3">Ericsson</h4>
+                            <ul class="text-sm space-y-2 text-gray-400">
+                                <li>• EDA (CAI3G) - Voice IMS</li>
+                                <li>• HSS - Subscriber Data</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cheat Sheets Container - Will be populated by JS -->
+            <section id="linux-admin" class="mb-12 scroll-mt-8">
+                <!-- Linux Admin Cheat Sheet will be loaded here -->
+            </section>
+
+            <!-- Glossary Section -->
+            <section id="glossary" class="mb-12 scroll-mt-8">
+                <div class="bg-secondary rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-book mr-3 text-yellow-400"></i>Quick Glossary
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">CFS</span>
+                            <span class="text-sm text-gray-400 ml-2">Customer Facing Service</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">RFS</span>
+                            <span class="text-sm text-gray-400 ml-2">Resource Facing Service</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">TS</span>
+                            <span class="text-sm text-gray-400 ml-2">Technical Service</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">OM</span>
+                            <span class="text-sm text-gray-400 ml-2">Order Management</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">P&A</span>
+                            <span class="text-sm text-gray-400 ml-2">Provisioning & Activation</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">OH</span>
+                            <span class="text-sm text-gray-400 ml-2">Order Hub</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">NEI</span>
+                            <span class="text-sm text-gray-400 ml-2">Network Element Interface</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">EMS</span>
+                            <span class="text-sm text-gray-400 ml-2">Element Management System</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">CDOM</span>
+                            <span class="text-sm text-gray-400 ml-2">Catalog Driven Order Management</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">BNG</span>
+                            <span class="text-sm text-gray-400 ml-2">Broadband Network Gateway</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">OLT</span>
+                            <span class="text-sm text-gray-400 ml-2">Optical Line Termination</span>
+                        </div>
+                        <div class="glossary-item bg-primary p-3 rounded-lg">
+                            <span class="font-mono text-accent">ONT</span>
+                            <span class="text-sm text-gray-400 ml-2">Optical Network Termination</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="text-center py-8 text-gray-500 text-sm">
+                <p>TE FlowOne Knowledge Hub - Built for exam preparation</p>
+                <p class="mt-2">Last updated: Feb 2026</p>
+            </footer>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
