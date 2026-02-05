@@ -3194,24 +3194,102 @@ function loadFlowOneArchitecture() {
 
             <!-- VMs & Sites Tab -->
             <div id="tab-infra-vms" class="tab-content active">
+                <!-- Instance-VM-Engine Relationship Diagram -->
+                <div class="bg-primary rounded-xl p-4 mb-6">
+                    <h3 class="font-semibold text-yellow-400 mb-4"><i class="fas fa-project-diagram mr-2"></i>Instance → VM → Task Engine Relationship</h3>
+                    <div class="bg-gray-800 rounded-xl p-4">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs">
+                            <!-- Network OM1 -->
+                            <div class="bg-green-900/40 p-3 rounded-lg border border-green-600">
+                                <h4 class="font-bold text-green-400 text-center mb-2">Network OM (OM1)</h4>
+                                <p class="text-center text-gray-400 mb-2">Voice | Data | IPTV</p>
+                                <div class="space-y-1 mb-3">
+                                    <div class="bg-green-800/50 px-2 py-1 rounded text-center">LB: 2 VMs (2vCPU, 4GB)</div>
+                                    <div class="bg-green-800/50 px-2 py-1 rounded text-center">App: 3 VMs (8vCPU, 12GB)</div>
+                                    <div class="bg-green-800/50 px-2 py-1 rounded text-center">DB: 2 VMs (16vCPU, 160GB)</div>
+                                    <div class="bg-green-800/50 px-2 py-1 rounded text-center">Archive: 2 VMs (14vCPU, 96GB)</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-arrow-down text-green-400"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- IT OM2 -->
+                            <div class="bg-blue-900/40 p-3 rounded-lg border border-blue-600">
+                                <h4 class="font-bold text-blue-400 text-center mb-2">IT OM (OM2)</h4>
+                                <p class="text-center text-gray-400 mb-2">B2B | Enterprise | SHDSL</p>
+                                <div class="space-y-1 mb-3">
+                                    <div class="bg-blue-800/50 px-2 py-1 rounded text-center">LB: 2 VMs (2vCPU, 4GB)</div>
+                                    <div class="bg-blue-800/50 px-2 py-1 rounded text-center">App: 3 VMs (8vCPU, 24GB)</div>
+                                    <div class="bg-blue-800/50 px-2 py-1 rounded text-center">DB: 2 VMs (16vCPU, 160GB)</div>
+                                    <div class="bg-blue-800/50 px-2 py-1 rounded text-center">Archive: 2 VMs (15vCPU, 96GB)</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-arrow-down text-blue-400"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Common P&A -->
+                            <div class="bg-purple-900/40 p-3 rounded-lg border border-purple-600">
+                                <h4 class="font-bold text-purple-400 text-center mb-2">Common P&A</h4>
+                                <p class="text-center text-gray-400 mb-2">Shared Provisioning</p>
+                                <div class="space-y-1 mb-3">
+                                    <div class="bg-purple-800/50 px-2 py-1 rounded text-center">LB: 2 VMs (2vCPU, 4GB)</div>
+                                    <div class="bg-purple-800/50 px-2 py-1 rounded text-center">App: 3 VMs (12vCPU, 104GB)</div>
+                                    <div class="bg-purple-800/50 px-2 py-1 rounded text-center">DB: 2 VMs (24vCPU, 160GB)</div>
+                                    <div class="bg-purple-800/50 px-2 py-1 rounded text-center">Workflow: 2 VMs (6vCPU, 16GB)</div>
+                                    <div class="bg-purple-800/50 px-2 py-1 rounded text-center">Prov Client: 2 VMs (8vCPU, 16GB)</div>
+                                </div>
+                                <div class="text-center">
+                                    <i class="fas fa-arrow-down text-purple-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Task Engine Flow -->
+                        <div class="mt-4 bg-orange-900/40 p-3 rounded-lg border border-orange-600">
+                            <h4 class="font-bold text-orange-400 text-center mb-2">Task Engines (Running on P&A VMs)</h4>
+                            <div class="flex flex-wrap justify-center gap-2">
+                                <span class="bg-orange-800/50 px-3 py-1 rounded">Orchestration Engine</span>
+                                <span class="bg-orange-800/50 px-3 py-1 rounded">Activation Engine</span>
+                                <span class="bg-orange-800/50 px-3 py-1 rounded">Workflow Engine</span>
+                                <span class="bg-orange-800/50 px-3 py-1 rounded">Jeopardy Engine</span>
+                                <span class="bg-orange-800/50 px-3 py-1 rounded">Fallout Engine</span>
+                            </div>
+                            <p class="text-center text-gray-400 mt-2 text-xs">All task engines share the P&A Application VMs (3 nodes cluster)</p>
+                        </div>
+                        
+                        <!-- Flow arrows to NEIs -->
+                        <div class="mt-4 text-center">
+                            <i class="fas fa-arrow-down text-red-400 text-xl"></i>
+                            <div class="bg-red-900/40 p-2 rounded-lg border border-red-600 mt-2">
+                                <span class="text-red-400 font-semibold">Southbound NEIs</span>
+                                <span class="text-gray-400 ml-2">(Huawei EMS | ZTE EMS | Nokia EMS | IPTV | Voice Core)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                     <!-- Main Site -->
                     <div class="bg-primary rounded-xl p-4">
                         <h3 class="font-semibold text-green-400 mb-4"><i class="fas fa-building mr-2"></i>Main Site (OCT02)</h3>
                         <div class="space-y-3">
                             <div class="bg-green-900/30 p-3 rounded-lg">
-                                <h4 class="font-semibold text-sm">Network OM Instance</h4>
+                                <h4 class="font-semibold text-sm">Network OM Instance (OM1)</h4>
+                                <p class="text-xs text-gray-400 mb-2">Services: Voice, Data, IPTV (B2C)</p>
                                 <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
                                     <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
                                     <span class="bg-gray-800 px-2 py-1 rounded">Deployment Node: 1</span>
-                                    <span class="bg-gray-800 px-2 py-1 rounded">OM Application: 3 nodes</span>
-                                    <span class="bg-gray-800 px-2 py-1 rounded">OM + Catalog DB: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM1 Application: 3 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM1 + Catalog DB: 2 nodes</span>
                                     <span class="bg-gray-800 px-2 py-1 rounded">Archive DB: 2 nodes</span>
                                     <span class="bg-gray-800 px-2 py-1 rounded">Catalog App: 2 nodes</span>
                                 </div>
                             </div>
                             <div class="bg-blue-900/30 p-3 rounded-lg">
-                                <h4 class="font-semibold text-sm">IT OM Instance</h4>
+                                <h4 class="font-semibold text-sm">IT OM Instance (OM2)</h4>
+                                <p class="text-xs text-gray-400 mb-2">Services: B2B, Enterprise, SHDSL, P2P</p>
                                 <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
                                     <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
                                     <span class="bg-gray-800 px-2 py-1 rounded">OM2 Application: 3 nodes</span>
@@ -3221,6 +3299,7 @@ function loadFlowOneArchitecture() {
                             </div>
                             <div class="bg-purple-900/30 p-3 rounded-lg">
                                 <h4 class="font-semibold text-sm">Common P&A Instance</h4>
+                                <p class="text-xs text-gray-400 mb-2">Shared by OM1 & OM2 → Runs Task Engines</p>
                                 <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
                                     <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
                                     <span class="bg-gray-800 px-2 py-1 rounded">P&A Application: 3 nodes</span>
