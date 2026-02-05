@@ -3180,113 +3180,488 @@ function loadFlowOneArchitecture() {
     archSection.innerHTML = `
         <div class="bg-secondary rounded-2xl p-6 shadow-xl">
             <h2 class="text-2xl font-bold mb-6 flex items-center">
-                <i class="fas fa-server mr-3 text-blue-400"></i>FlowOne Architecture & VMs
+                <i class="fas fa-server mr-3 text-blue-400"></i>FlowOne Infrastructure & Architecture
             </h2>
 
-            <!-- Architecture Overview -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Main Site -->
-                <div class="bg-primary rounded-xl p-4">
-                    <h3 class="font-semibold text-green-400 mb-4"><i class="fas fa-building mr-2"></i>Main Site (OCT02)</h3>
-                    <div class="space-y-3">
-                        <div class="bg-green-900/30 p-3 rounded-lg">
-                            <h4 class="font-semibold text-sm">Network OM Instance</h4>
-                            <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
-                                <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Deployment Node: 1</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">OM Application: 3 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">OM + Catalog DB: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Archive DB: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Catalog App: 2 nodes</span>
+            <!-- Tab Navigation -->
+            <div class="tab-container mb-6">
+                <button class="tab-btn active" data-tab="infra-vms">VMs & Sites</button>
+                <button class="tab-btn" data-tab="infra-sync">Sync/Async</button>
+                <button class="tab-btn" data-tab="infra-engines">Task Engines</button>
+                <button class="tab-btn" data-tab="infra-grc">GRC & Queues</button>
+                <button class="tab-btn" data-tab="infra-relations">Component Relations</button>
+            </div>
+
+            <!-- VMs & Sites Tab -->
+            <div id="tab-infra-vms" class="tab-content active">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Main Site -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-green-400 mb-4"><i class="fas fa-building mr-2"></i>Main Site (OCT02)</h3>
+                        <div class="space-y-3">
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Network OM Instance</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Deployment Node: 1</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM Application: 3 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM + Catalog DB: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Archive DB: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Catalog App: 2 nodes</span>
+                                </div>
+                            </div>
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">IT OM Instance</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM2 Application: 3 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">OM2 + Catalog DB: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Archive DB: 2 nodes</span>
+                                </div>
+                            </div>
+                            <div class="bg-purple-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Common P&A Instance</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">P&A Application: 3 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">P&A + Catalog DB: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Workflow Client: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Provisioning Client: 2 nodes</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">Catalog App: 2 nodes</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="bg-blue-900/30 p-3 rounded-lg">
-                            <h4 class="font-semibold text-sm">P&A Instance</h4>
+                    </div>
+
+                    <!-- DR Site -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-orange-400 mb-4"><i class="fas fa-shield-alt mr-2"></i>DR Site (AUTO)</h3>
+                        <div class="space-y-3">
+                            <div class="bg-orange-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Mirrored Configuration</h4>
+                                <p class="text-xs text-gray-400 mt-2">Same VM topology as Main Site for failover</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• Active-Passive replication</li>
+                                    <li>• Shared storage: 970 GB Ceph</li>
+                                    <li>• Local storage: 4420 GB per site</li>
+                                    <li>• Total vCPU: 92 per site</li>
+                                    <li>• Total RAM: 448 GB per site</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-4 bg-cyan-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm text-cyan-400">Shared Storage Breakdown</h4>
                             <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
-                                <span class="bg-gray-800 px-2 py-1 rounded">Load Balancer: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Deployment Node: 1</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">P&A Application: 3 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">P&A + Catalog DB: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Provisioning Client: 2 nodes</span>
-                                <span class="bg-gray-800 px-2 py-1 rounded">Workflow Client: 2 nodes</span>
+                                <span class="bg-gray-800 px-2 py-1 rounded">Data: 100 GB</span>
+                                <span class="bg-gray-800 px-2 py-1 rounded">Archive: 100 GB</span>
+                                <span class="bg-gray-800 px-2 py-1 rounded">Redo: 2x20 GB</span>
+                                <span class="bg-gray-800 px-2 py-1 rounded">OCRVOTE: 3x15 GB</span>
+                                <span class="bg-gray-800 px-2 py-1 rounded">MGMTDB: 80 GB</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- DR Site -->
+                <!-- VM Resources Table -->
                 <div class="bg-primary rounded-xl p-4">
-                    <h3 class="font-semibold text-orange-400 mb-4"><i class="fas fa-shield-alt mr-2"></i>DR Site (AUTO)</h3>
-                    <div class="space-y-3">
-                        <div class="bg-orange-900/30 p-3 rounded-lg">
-                            <h4 class="font-semibold text-sm">Mirrored Configuration</h4>
-                            <p class="text-xs text-gray-400 mt-2">Same VM topology as Main Site for failover</p>
+                    <h3 class="font-semibold text-cyan-400 mb-4"><i class="fas fa-microchip mr-2"></i>VM Resource Specs</h3>
+                    <div class="overflow-x-auto">
+                        <table class="ref-table w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Nodes</th>
+                                    <th>vCPU/Node</th>
+                                    <th>RAM (GB)</th>
+                                    <th>Disk (GB)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Load Balancer</td><td>2</td><td>2</td><td>4</td><td>16</td></tr>
+                                <tr><td>Deployment Node</td><td>1</td><td>2</td><td>4</td><td>200</td></tr>
+                                <tr><td>OM Application</td><td>3</td><td>8</td><td>12</td><td>280</td></tr>
+                                <tr><td>OM + Catalog DB</td><td>2</td><td>16</td><td>160</td><td>796</td></tr>
+                                <tr><td>P&A Application</td><td>3</td><td>12</td><td>104</td><td>3304</td></tr>
+                                <tr><td>P&A + Catalog DB</td><td>2</td><td>24</td><td>160</td><td>7244</td></tr>
+                                <tr><td>Provisioning Client</td><td>2</td><td>8</td><td>16</td><td>200</td></tr>
+                                <tr><td>Workflow Client</td><td>2</td><td>6</td><td>16</td><td>200</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sync/Async Tab -->
+            <div id="tab-infra-sync" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Synchronous -->
+                    <div class="bg-primary rounded-xl p-4 border-l-4 border-green-500">
+                        <h3 class="font-semibold text-green-400 mb-4"><i class="fas fa-bolt mr-2"></i>Synchronous (SYNC)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Request waits for immediate response</p>
+                        <div class="space-y-3">
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Use Cases</h4>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• <strong>Feasibility</strong> - Check port availability</li>
+                                    <li>• <strong>Get NAS Port ID</strong> - Retrieve port identifier</li>
+                                    <li>• <strong>Check Eligibility</strong> - IPTV eligibility</li>
+                                    <li>• <strong>Change Package Validation</strong> - Pre-check</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Flow</h4>
+                                <div class="text-xs mt-2 font-mono bg-gray-800 p-2 rounded">
+                                    BSS → SYNC Request → FlowOne<br>
+                                    FlowOne → SYNC Response → BSS<br>
+                                    <span class="text-green-400">Timeout: 60s (configurable)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asynchronous -->
+                    <div class="bg-primary rounded-xl p-4 border-l-4 border-blue-500">
+                        <h3 class="font-semibold text-blue-400 mb-4"><i class="fas fa-clock mr-2"></i>Asynchronous (ASYNC)</h3>
+                        <p class="text-sm text-gray-400 mb-3">Request queued, callback on completion</p>
+                        <div class="space-y-3">
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Use Cases</h4>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• <strong>Create</strong> - Provision new service</li>
+                                    <li>• <strong>Terminate</strong> - Delete service</li>
+                                    <li>• <strong>Suspend</strong> - Disable service</li>
+                                    <li>• <strong>Resume</strong> - Re-enable service</li>
+                                    <li>• <strong>Modify Package</strong> - Change speed/features</li>
+                                </ul>
+                            </div>
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Flow</h4>
+                                <div class="text-xs mt-2 font-mono bg-gray-800 p-2 rounded">
+                                    BSS → ASYNC Request → FlowOne<br>
+                                    FlowOne → <span class="text-yellow-400">ACK (immediate)</span> → BSS<br>
+                                    FlowOne → [Processing...]<br>
+                                    FlowOne → <span class="text-green-400">Callback Response</span> → BSS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request/Response Structure -->
+                <div class="bg-primary rounded-xl p-4">
+                    <h3 class="font-semibold text-purple-400 mb-4"><i class="fas fa-exchange-alt mr-2"></i>SOAP Request/Response Structure</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-purple-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm">Status Codes</h4>
+                            <div class="text-xs mt-2 space-y-1">
+                                <p><span class="text-green-400">Status=0</span> - Success</p>
+                                <p><span class="text-yellow-400">Status=1,2,3</span> - Rejected, resend required</p>
+                                <p><span class="text-red-400">Status=7,8</span> - Failure, re-execute</p>
+                            </div>
+                        </div>
+                        <div class="bg-purple-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm">Callback URL</h4>
+                            <div class="text-xs mt-2">
+                                <p class="text-gray-400">BSS provides callback URL in ASYNC requests</p>
+                                <p class="font-mono bg-gray-800 px-2 py-1 rounded mt-1">CALLBACK_URL parameter</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task Engines Tab -->
+            <div id="tab-infra-engines" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- OM Task Engines -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-blue-400 mb-4"><i class="fas fa-cog mr-2"></i>Order Management (OM) Engines</h3>
+                        <div class="space-y-3">
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Order Orchestration Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Decomposes CFS orders to RFS/TS tasks</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• Order decomposition</li>
+                                    <li>• Workflow sequencing</li>
+                                    <li>• Dependency management</li>
+                                </ul>
+                            </div>
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Jeopardy Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Monitors SLA and triggers alerts</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• SLA tracking</li>
+                                    <li>• Escalation triggers</li>
+                                    <li>• Age-based monitoring</li>
+                                </ul>
+                            </div>
+                            <div class="bg-blue-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Fallout Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Handles task failures</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• IGNORE / RETRY / ROLLBACK</li>
+                                    <li>• STOP / Order Hub escalation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- P&A Task Engines -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-green-400 mb-4"><i class="fas fa-network-wired mr-2"></i>Provisioning & Activation (P&A) Engines</h3>
+                        <div class="space-y-3">
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Activation Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Executes provisioning tasks on NEIs</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• EMS/NEI communication</li>
+                                    <li>• TL script execution</li>
+                                    <li>• Configuration push</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Workflow Client Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Manages workflow execution</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• Task state management</li>
+                                    <li>• Transaction coordination</li>
+                                    <li>• Rollback orchestration</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Provisioning Client Engine</h4>
+                                <p class="text-xs text-gray-400 mt-1">Southbound protocol handling</p>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• SOAP/REST adapters</li>
+                                    <li>• CLI/TL1 adapters</li>
+                                    <li>• Connection pooling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engine Flow Diagram -->
+                <div class="bg-primary rounded-xl p-4">
+                    <h3 class="font-semibold text-purple-400 mb-4"><i class="fas fa-project-diagram mr-2"></i>Engine Processing Flow</h3>
+                    <div class="flex flex-wrap items-center justify-center gap-2 text-xs">
+                        <span class="bg-blue-900 px-3 py-2 rounded">Northbound Request</span>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <span class="bg-blue-700 px-3 py-2 rounded">OM Orchestration</span>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <span class="bg-purple-700 px-3 py-2 rounded">Task Queue</span>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <span class="bg-green-700 px-3 py-2 rounded">P&A Activation</span>
+                        <i class="fas fa-arrow-right text-gray-500"></i>
+                        <span class="bg-orange-700 px-3 py-2 rounded">NEI/EMS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRC & Queues Tab -->
+            <div id="tab-infra-grc" class="tab-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- GRC Parameters -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-yellow-400 mb-4"><i class="fas fa-sliders-h mr-2"></i>GRC Parameters</h3>
+                        <p class="text-xs text-gray-400 mb-3">Global Runtime Configuration - System-wide settings</p>
+                        <div class="space-y-3">
+                            <div class="bg-yellow-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Timeout Parameters</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">SYNC_TIMEOUT: 60s</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">ASYNC_TIMEOUT: 300s</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">NEI_TIMEOUT: 30s</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">DB_TIMEOUT: 10s</span>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Retry Parameters</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">MAX_RETRIES: 3</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">RETRY_INTERVAL: 60s</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">BACKOFF_MULTIPLIER: 2</span>
+                                </div>
+                            </div>
+                            <div class="bg-yellow-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Capacity Parameters</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-2 text-xs">
+                                    <span class="bg-gray-800 px-2 py-1 rounded">MAX_CONCURRENT: 100</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">QUEUE_SIZE: 10000</span>
+                                    <span class="bg-gray-800 px-2 py-1 rounded">THREAD_POOL: 50</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queues -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-cyan-400 mb-4"><i class="fas fa-stream mr-2"></i>Message Queues</h3>
+                        <p class="text-xs text-gray-400 mb-3">JMS queues for asynchronous processing</p>
+                        <div class="space-y-3">
+                            <div class="bg-cyan-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">OM Queues</h4>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• <span class="text-cyan-300">OM_INBOUND_Q</span> - Incoming orders</li>
+                                    <li>• <span class="text-cyan-300">OM_OUTBOUND_Q</span> - Responses</li>
+                                    <li>• <span class="text-cyan-300">OM_CALLBACK_Q</span> - Async callbacks</li>
+                                    <li>• <span class="text-cyan-300">OM_DLQ</span> - Dead letter queue</li>
+                                </ul>
+                            </div>
+                            <div class="bg-cyan-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">P&A Queues</h4>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• <span class="text-cyan-300">PA_TASK_Q</span> - Provisioning tasks</li>
+                                    <li>• <span class="text-cyan-300">PA_RESPONSE_Q</span> - NEI responses</li>
+                                    <li>• <span class="text-cyan-300">PA_FALLOUT_Q</span> - Failed tasks</li>
+                                    <li>• <span class="text-cyan-300">PA_PRIORITY_Q</span> - High priority</li>
+                                </ul>
+                            </div>
+                            <div class="bg-cyan-900/30 p-3 rounded-lg">
+                                <h4 class="font-semibold text-sm">Integration Queues</h4>
+                                <ul class="text-xs mt-2 space-y-1">
+                                    <li>• <span class="text-cyan-300">VC4_REQUEST_Q</span> - Inventory</li>
+                                    <li>• <span class="text-cyan-300">EMS_REQUEST_Q</span> - Network elements</li>
+                                    <li>• <span class="text-cyan-300">IPTV_REQUEST_Q</span> - IPTV platform</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fallout Lookup -->
+                <div class="bg-primary rounded-xl p-4">
+                    <h3 class="font-semibold text-red-400 mb-4"><i class="fas fa-exclamation-triangle mr-2"></i>LOOKUP_FALLOUT Configuration</h3>
+                    <div class="overflow-x-auto">
+                        <table class="ref-table w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Error Type</th>
+                                    <th>Action</th>
+                                    <th>Max Retries</th>
+                                    <th>Escalation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>CONNECTION_TIMEOUT</td><td class="text-yellow-400">RETRY</td><td>3</td><td>Order Hub</td></tr>
+                                <tr><td>VALIDATION_ERROR</td><td class="text-red-400">STOP</td><td>0</td><td>Immediate</td></tr>
+                                <tr><td>RESOURCE_BUSY</td><td class="text-yellow-400">RETRY</td><td>5</td><td>After retries</td></tr>
+                                <tr><td>NEI_UNREACHABLE</td><td class="text-orange-400">ROLLBACK</td><td>0</td><td>Order Hub</td></tr>
+                                <tr><td>DATA_MISMATCH</td><td class="text-gray-400">IGNORE</td><td>-</td><td>Log only</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Component Relations Tab -->
+            <div id="tab-infra-relations" class="tab-content">
+                <div class="bg-primary rounded-xl p-4 mb-6">
+                    <h3 class="font-semibold text-purple-400 mb-4"><i class="fas fa-project-diagram mr-2"></i>System Component Relations</h3>
+                    
+                    <!-- Architecture Diagram -->
+                    <div class="bg-gray-800 rounded-xl p-4 mb-4">
+                        <div class="grid grid-cols-5 gap-2 text-center text-xs">
+                            <!-- Row 1: Northbound -->
+                            <div class="col-span-5 bg-green-900/50 p-3 rounded-lg mb-2">
+                                <p class="font-semibold text-green-400 mb-2">NORTHBOUND (BSS/OSS)</p>
+                                <div class="flex justify-center gap-2 flex-wrap">
+                                    <span class="bg-green-800 px-2 py-1 rounded">Huawei SOM</span>
+                                    <span class="bg-green-800 px-2 py-1 rounded">BSS/CRM</span>
+                                    <span class="bg-green-800 px-2 py-1 rounded">ADSL Portal</span>
+                                    <span class="bg-green-800 px-2 py-1 rounded">KAM Portal</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Row 2: Middleware 11 -->
+                            <div class="col-span-5 bg-orange-900/50 p-3 rounded-lg mb-2">
+                                <p class="font-semibold text-orange-400 mb-2">MIDDLEWARE 11 (Integration Layer)</p>
+                                <div class="flex justify-center gap-2 flex-wrap">
+                                    <span class="bg-orange-800 px-2 py-1 rounded">API Gateway</span>
+                                    <span class="bg-orange-800 px-2 py-1 rounded">Message Queue</span>
+                                    <span class="bg-orange-800 px-2 py-1 rounded">SOAP/REST Adapter</span>
+                                    <span class="bg-orange-800 px-2 py-1 rounded">Auth & Security</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Row 3: FlowOne -->
+                            <div class="col-span-5 bg-blue-900/50 p-3 rounded-lg mb-2">
+                                <p class="font-semibold text-blue-400 mb-2">NOKIA FLOWONE</p>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="bg-blue-800 p-2 rounded">
+                                        <p class="font-semibold">OM</p>
+                                        <p class="text-gray-400">Order Management</p>
+                                    </div>
+                                    <div class="bg-blue-800 p-2 rounded">
+                                        <p class="font-semibold">P&A</p>
+                                        <p class="text-gray-400">Provisioning</p>
+                                    </div>
+                                    <div class="bg-blue-800 p-2 rounded">
+                                        <p class="font-semibold">Catalog</p>
+                                        <p class="text-gray-400">Service Specs</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Row 4: Inventory -->
+                            <div class="col-span-5 bg-purple-900/50 p-3 rounded-lg mb-2">
+                                <p class="font-semibold text-purple-400 mb-2">INVENTORY (VC4)</p>
+                                <div class="flex justify-center gap-2 flex-wrap">
+                                    <span class="bg-purple-800 px-2 py-1 rounded">Resource DB</span>
+                                    <span class="bg-purple-800 px-2 py-1 rounded">Port Management</span>
+                                    <span class="bg-purple-800 px-2 py-1 rounded">VLAN Allocation</span>
+                                    <span class="bg-purple-800 px-2 py-1 rounded">Service Status</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Row 5: Southbound -->
+                            <div class="col-span-5 bg-red-900/50 p-3 rounded-lg">
+                                <p class="font-semibold text-red-400 mb-2">SOUTHBOUND (NEIs/EMS)</p>
+                                <div class="flex justify-center gap-2 flex-wrap">
+                                    <span class="bg-red-800 px-2 py-1 rounded">Huawei EMS</span>
+                                    <span class="bg-red-800 px-2 py-1 rounded">ZTE EMS</span>
+                                    <span class="bg-red-800 px-2 py-1 rounded">Nokia EMS</span>
+                                    <span class="bg-red-800 px-2 py-1 rounded">IPTV Platform</span>
+                                    <span class="bg-red-800 px-2 py-1 rounded">Voice Core</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Integration Points -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm text-green-400">Northbound APIs</h4>
                             <ul class="text-xs mt-2 space-y-1">
-                                <li>• Active-Passive replication</li>
-                                <li>• Shared storage: 970 GB Ceph</li>
-                                <li>• Local storage: 4420 GB per site</li>
+                                <li>• SOAP Web Services</li>
+                                <li>• InstantLink binding</li>
+                                <li>• Callback mechanisms</li>
+                            </ul>
+                        </div>
+                        <div class="bg-purple-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm text-purple-400">Westbound (VC4)</h4>
+                            <ul class="text-xs mt-2 space-y-1">
+                                <li>• REST API</li>
+                                <li>• GET_LINE_DETAILS</li>
+                                <li>• RESERVE/COMMIT</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-900/30 p-3 rounded-lg">
+                            <h4 class="font-semibold text-sm text-red-400">Southbound (NEI)</h4>
+                            <ul class="text-xs mt-2 space-y-1">
+                                <li>• SOAP/REST</li>
+                                <li>• CLI/TL1</li>
+                                <li>• SNMP</li>
                             </ul>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Sync vs Async -->
-            <div class="bg-primary rounded-xl p-4 mb-6">
-                <h3 class="font-semibold text-purple-400 mb-4"><i class="fas fa-sync-alt mr-2"></i>Sync vs Async Processing</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-purple-900/30 p-4 rounded-lg border border-purple-700">
-                        <h4 class="font-semibold text-purple-300 mb-2">Synchronous (Sync)</h4>
-                        <ul class="text-sm space-y-2">
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Request waits for response</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Used for: Feasibility, Get NAS Port ID</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Immediate result to caller</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Timeout: configurable (default 60s)</li>
-                        </ul>
-                    </div>
-                    <div class="bg-blue-900/30 p-4 rounded-lg border border-blue-700">
-                        <h4 class="font-semibold text-blue-300 mb-2">Asynchronous (Async)</h4>
-                        <ul class="text-sm space-y-2">
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Request queued, callback on completion</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Used for: Create, Suspend, Resume, Terminate</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Northbound gets ACK immediately</li>
-                            <li class="flex items-start"><i class="fas fa-check text-green-400 mr-2 mt-1"></i>Final response via callback URL</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VM Resources Table -->
-            <div class="bg-primary rounded-xl p-4">
-                <h3 class="font-semibold text-cyan-400 mb-4"><i class="fas fa-microchip mr-2"></i>VM Resource Specs</h3>
-                <div class="overflow-x-auto">
-                    <table class="ref-table w-full text-sm">
-                        <thead>
-                            <tr>
-                                <th>Component</th>
-                                <th>Nodes</th>
-                                <th>vCPU/Node</th>
-                                <th>RAM (GB)</th>
-                                <th>Disk (GB)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>Load Balancer</td><td>2</td><td>2</td><td>4</td><td>16</td></tr>
-                            <tr><td>Deployment Node</td><td>1</td><td>2</td><td>4</td><td>200</td></tr>
-                            <tr><td>OM Application</td><td>3</td><td>8</td><td>12</td><td>280</td></tr>
-                            <tr><td>OM + Catalog DB</td><td>2</td><td>16</td><td>160</td><td>796</td></tr>
-                            <tr><td>P&A Application</td><td>3</td><td>12</td><td>104</td><td>3304</td></tr>
-                            <tr><td>P&A + Catalog DB</td><td>2</td><td>24</td><td>160</td><td>7244</td></tr>
-                            <tr><td>Provisioning Client</td><td>2</td><td>8</td><td>16</td><td>200</td></tr>
-                            <tr><td>Workflow Client</td><td>2</td><td>6</td><td>16</td><td>200</td></tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
     `;
 
     catalogSection.after(archSection);
+    setTimeout(() => initTabs(), 100);
 }
 
 /**
