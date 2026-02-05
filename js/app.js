@@ -2035,14 +2035,120 @@ function loadShellScriptingCheatSheet() {
             
             <!-- Tab Navigation -->
             <div class="tab-container mb-6">
-                <button class="tab-btn active" data-tab="fo-scripting">FlowOne Scripting</button>
+                <button class="tab-btn active" data-tab="tl-explained">Nokia's TL Scripting</button>
+                <button class="tab-btn" data-tab="fo-scripting">FlowOne Scripting</button>
                 <button class="tab-btn" data-tab="soap-testing">SOAP Testing</button>
                 <button class="tab-btn" data-tab="curl-telecom">cURL Telecom</button>
                 <button class="tab-btn" data-tab="bash-basics">Bash Basics</button>
             </div>
 
+            <!-- Nokia's TL Scripting Explained Tab -->
+            <div id="tab-tl-explained" class="tab-content active">
+                <div class="space-y-6">
+                    <!-- What It Does -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-blue-400 mb-3"><i class="fas fa-info-circle mr-2"></i>What Is TL Scripting?</h3>
+                        <p class="text-gray-300 mb-3">Nokia FlowOne uses <strong>TL (Task Logic)</strong> scripting, which is built on <strong>Groovy</strong> (a Java-like language). TL scripts are the "brain" of each task in FlowOne.</p>
+                        <p class="text-gray-400">Every time an order needs to <strong>Validate</strong> inputs, <strong>Call</strong> an external system (VC4, EMS), <strong>Transform</strong> data, or <strong>Handle</strong> errors... a TL script runs.</p>
+                    </div>
+
+                    <!-- Basic Structure -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-green-400 mb-3"><i class="fas fa-layer-group mr-2"></i>Basic Structure</h3>
+                        <p class="text-gray-400 mb-3">Every TL script has 3 parts:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                            <div class="bg-green-900/30 p-3 rounded-lg text-center">
+                                <span class="text-green-400 font-bold">1. GET INPUTS</span>
+                                <p class="text-xs text-gray-400 mt-1">Read data from the order (DN_NO, AREA_CODE, etc.)</p>
+                            </div>
+                            <div class="bg-blue-900/30 p-3 rounded-lg text-center">
+                                <span class="text-blue-400 font-bold">2. DO SOMETHING</span>
+                                <p class="text-xs text-gray-400 mt-1">Call a service, validate, transform</p>
+                            </div>
+                            <div class="bg-purple-900/30 p-3 rounded-lg text-center">
+                                <span class="text-purple-400 font-bold">3. SET OUTPUTS</span>
+                                <p class="text-xs text-gray-400 mt-1">Pass results to the next task</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simple Example -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-yellow-400 mb-3"><i class="fas fa-code mr-2"></i>Simple Example</h3>
+                        <div class="code-block">
+                            <code>
+<span class="comment">// 1. Get input from order</span>
+def phoneNumber = input.get("DN_NO")
+
+<span class="comment">// 2. Call VC4 to check if port is free</span>
+def result = vc4Service.getLineDetails(phoneNumber)
+
+<span class="comment">// 3. Check result and set output</span>
+if (result.DATA_STATUS == "FREE") {
+    output.set("PORT_STATUS", "AVAILABLE")
+    output.set("MSAN_IP", result.MSAN_IP)
+} else {
+    throw new FalloutException("Port not free")
+}
+                            </code>
+                        </div>
+                    </div>
+
+                    <!-- Why It's Unique -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-purple-400 mb-3"><i class="fas fa-star mr-2"></i>Why It's Unique</h3>
+                        <div class="overflow-x-auto">
+                            <table class="ref-table w-full text-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>What It Means</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="text-cyan-400">Built-in Service Calls</td><td>Pre-defined functions to call VC4, EMS, etc.</td></tr>
+                                    <tr><td class="text-cyan-400">Automatic Rollback</td><td>If task fails, FlowOne knows how to undo it</td></tr>
+                                    <tr><td class="text-cyan-400">Fallout Handling</td><td>Scripts can trigger RETRY, STOP, IGNORE, ROLLBACK</td></tr>
+                                    <tr><td class="text-cyan-400">Order Context</td><td>Scripts can access any order data without extra setup</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Key Functions -->
+                    <div class="bg-primary rounded-xl p-4">
+                        <h3 class="font-semibold text-orange-400 mb-3"><i class="fas fa-key mr-2"></i>Key Functions You'll See</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div class="bg-orange-900/30 p-3 rounded-lg">
+                                <code class="text-orange-300">input.get("PARAM")</code>
+                                <p class="text-xs text-gray-400 mt-1">Read from order</p>
+                            </div>
+                            <div class="bg-orange-900/30 p-3 rounded-lg">
+                                <code class="text-orange-300">output.set("PARAM", value)</code>
+                                <p class="text-xs text-gray-400 mt-1">Write to order</p>
+                            </div>
+                            <div class="bg-orange-900/30 p-3 rounded-lg">
+                                <code class="text-orange-300">lookupService.get("TABLE", "KEY")</code>
+                                <p class="text-xs text-gray-400 mt-1">Lookup config tables</p>
+                            </div>
+                            <div class="bg-orange-900/30 p-3 rounded-lg">
+                                <code class="text-orange-300">throw new FalloutException()</code>
+                                <p class="text-xs text-gray-400 mt-1">Trigger fallout handling</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- In Practice -->
+                    <div class="memory-card">
+                        <h4><i class="fas fa-brain mr-2"></i>In Practice</h4>
+                        <p class="text-sm text-gray-300">When you see a FlowOne workflow like "Create FTTH Data", each phase (Validation → D&A → Provision → Commit) runs multiple TL scripts that chain together, passing data through <code>input</code>/<code>output</code>.</p>
+                        <p class="mnemonic mt-2">TL = Groovy + FlowOne helpers for telecom provisioning without boilerplate</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- FlowOne Scripting Tab -->
-            <div id="tab-fo-scripting" class="tab-content active">
+            <div id="tab-fo-scripting" class="tab-content">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="cheat-sheet-card p-4 rounded-xl">
                         <h4 class="font-semibold text-blue-400 mb-3"><i class="fas fa-code mr-2"></i>FlowOne Task Library (TL) Scripting</h4>
