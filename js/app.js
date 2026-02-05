@@ -45,14 +45,16 @@ function initSidebar() {
             mainContent.classList.add('lg:ml-0');
             toggleIcon.classList.remove('fa-chevron-left');
             toggleIcon.classList.add('fa-chevron-right');
-            sidebarToggle.classList.remove('left-4');
-            sidebarToggle.classList.add('left-4');
+            // Move toggle button to left edge when sidebar collapsed
+            sidebarToggle.style.left = '1rem';
         } else {
             sidebar.classList.remove('lg:-translate-x-full');
             mainContent.classList.add('lg:ml-72');
             mainContent.classList.remove('lg:ml-0');
             toggleIcon.classList.add('fa-chevron-left');
             toggleIcon.classList.remove('fa-chevron-right');
+            // Move toggle button back to sidebar edge
+            sidebarToggle.style.left = '19rem';
         }
     });
 
